@@ -1,7 +1,10 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import workoutSlice from '../reducers/workoutReducer';
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    workout: workoutSlice,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
