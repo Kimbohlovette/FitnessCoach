@@ -2,7 +2,16 @@ import { createSlice } from '@reduxjs/toolkit';
 import { InitialState } from '../../types';
 
 const initialState: InitialState = {
-  workouts: [],
+  workouts: [
+    {
+      title: 'Yoga',
+      description:
+        'Slow motion exercise that help you make your body flexible and elastic.',
+      exercises: ['Tai Chi', 'Meditation', 'Stretching'],
+      duration: 10,
+      postRestTime: 4,
+    },
+  ],
   currentWorkout: null,
   status: 'idle',
 };
