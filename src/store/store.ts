@@ -1,5 +1,5 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import workoutSlice from '../reducers/workoutReducer';
+import workoutSlice from './slices/workoutSlice';
 
 export const store = configureStore({
   reducer: {
