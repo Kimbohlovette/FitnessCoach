@@ -1,10 +1,5 @@
 import React, { useRef } from 'react';
-import {
-  DrawerLayoutAndroid,
-  SafeAreaView,
-  StatusBar,
-  View,
-} from 'react-native';
+import { DrawerLayoutAndroid, StatusBar, View } from 'react-native';
 import Header from './components/Header/Header';
 import Home from './pages/Home/Home';
 import { Colors } from './Styles';
@@ -33,9 +28,7 @@ const App = () => {
       drawerPosition={'left'}>
       <Header drawer={drawer} />
       <StatusBar backgroundColor={Colors.primaryDark.backgroundColor} />
-      <SafeAreaView>
-        <Home />
-      </SafeAreaView>
+      <Home />
     </DrawerLayoutAndroid>
   );
 };
