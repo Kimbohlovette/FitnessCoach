@@ -15,6 +15,8 @@ const Overview = () => {
       renderItem={({ item, index }) => {
         return <ShortWorkout key={index} workout={item} />;
       }}
+      ListEmptyComponent={ListContainerPlaceHolder}
+      ListHeaderComponent={ListHeaderTitle}
     />
   );
 };
@@ -34,6 +36,18 @@ const ShortWorkout = (props: { workout: Workout }) => {
       </View>
     </Pressable>
   );
+};
+
+const ListContainerPlaceHolder = () => {
+  return (
+    <View>
+      <Text>No items to display</Text>
+    </View>
+  );
+};
+
+const ListHeaderTitle = () => {
+  return <Text style={overviewStyles.overviewHeader}>Workout overview</Text>;
 };
 
 export default Overview;

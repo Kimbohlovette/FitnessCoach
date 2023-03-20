@@ -5,17 +5,23 @@ export const overviewStyles = StyleSheet.create({
     paddingVertical: 32,
   },
   workoutView: {
-    paddingVertical: 24,
+    paddingVertical: 16,
     paddingHorizontal: 16,
     borderRadius: 6,
   },
   workTitleStyle: {
-    fontSize: 28,
+    fontSize: 20,
     color: 'white',
   },
   workDescStyle: {
-    color: '#edf2f1',
+    color: '#d1d0cf',
     paddingVertical: 2,
+  },
+  overviewHeader: {
+    paddingHorizontal: 16,
+    fontSize: 24,
+    fontWeight: '700',
+    color: 'white',
   },
 });
 

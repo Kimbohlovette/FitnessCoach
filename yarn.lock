@@ -783,6 +783,11 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@dashdoc/react-native-system-sounds@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/@dashdoc/react-native-system-sounds/-/react-native-system-sounds-1.0.1.tgz"
+  integrity sha512-azKsmkwreG7fUGqtzJHNAqs7NPNaORtBwQogEvZCWcBPRnq9cD69dI8kNX6TOOylI3y9ZaB/NogzeCVaHxIWWg==
+
 "@eslint-community/eslint-utils@^4.2.0":
   version "4.3.0"
   resolved "https://registry.npmjs.org/@eslint-community/eslint-utils/-/eslint-utils-4.3.0.tgz"

@@ -1,5 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { InitialState } from '../../types';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { collection, getDocs } from 'firebase/firestore';
+import db from '../../../fbConfig';
+import { InitialState, Workout } from '../../types';
+import { AppDispatch } from '../store';
 
 const initialState: InitialState = {
   workouts: [
@@ -14,6 +17,7 @@ const initialState: InitialState = {
   ],
   currentWorkout: null,
   status: 'idle',
+  fetchStatus: 'idle',
 };
 const workoutSlice = createSlice({
   name: 'workout',
@@ -27,8 +31,49 @@ const workoutSlice = createSlice({
     setCurrentState: (state, action) => {
       state.status = action.payload;
     },
+    loadAllWorkouts: (state, action) => {
+      state.workouts = action.payload;
+    },
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(fetchWorkoutsAsync.pending, state => {
+        state.fetchStatus = 'loading';
+      })
+      .addCase(fetchWorkoutsAsync.rejected, state => {
+        state.fetchStatus = 'failed';
+      })
+      .addCase(fetchWorkoutsAsync.fulfilled, state => {
+        state.fetchStatus = 'idle';
+      });
   },
 });
 
+export const fetchWorkoutsAsync = createAsyncThunk(
+  'goals/fetchWorkouts',
+  async (dispatch: AppDispatch) => {
+    const docsRef = collection(db, 'workouts');
+    const docsSnapshot = await getDocs(docsRef);
+
+    const workouts: Workout[] = [];
+
+    docsSnapshot.forEach(document => {
+      const data = document.data();
+
+      const workout = {
+        title: data.title,
+        description: data.description,
+        exercises: data.exercises,
+        duration: data.duration,
+        postRestTime: data.postRestTime,
+      };
+      workouts.push(workout);
+    });
+    console.log(workouts);
+    dispatch(loadAllWorkouts(workouts));
+  },
+);
+
 export default workoutSlice.reducer;
-export const { setCurrentWorkout, setCurrentState } = workoutSlice.actions;
+export const { setCurrentWorkout, setCurrentState, loadAllWorkouts } =
+  workoutSlice.actions;

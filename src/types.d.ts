@@ -10,4 +10,5 @@ export interface InitialState {
   workouts: Workout[];
   currentWorkout: Workout | null;
   status: 'idle' | 'progress' | 'paused' | 'ready';
+  fetchStatus: 'idle' | 'loading' | 'failed';
 }

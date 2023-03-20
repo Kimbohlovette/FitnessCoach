@@ -40,7 +40,7 @@ export const homeStyles = StyleSheet.create({
     minWidth: '100%',
     alignContent: 'center',
     justifyContent: 'space-around',
-    marginVertical: 24,
+    marginVertical: 36,
   },
   cardView: {
     padding: 16,
@@ -63,16 +63,22 @@ export const homeStyles = StyleSheet.create({
     paddingVertical: 2,
     color: 'gray',
   },
+  startBtnContainer: {
+    overflow: 'hidden',
+    borderRadius: 50,
+    backgroundColor: '#ef4444',
+    elevation: 2,
+    width: '80%',
+    shadowColor: 'red',
+  },
   startBtn: {
     paddingVertical: 16,
     paddingHorizontal: 16,
-    width: '80%',
-    borderRadius: 50,
   },
   startBtnText: {
     textAlign: 'center',
     color: 'white',
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '600',
   },
 });
