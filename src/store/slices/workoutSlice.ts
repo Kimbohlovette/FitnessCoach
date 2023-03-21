@@ -15,7 +15,14 @@ const initialState: InitialState = {
       postRestTime: 4,
     },
   ],
-  currentWorkout: null,
+  currentWorkout: {
+    title: 'Yoga',
+    description:
+      'Slow motion exercise that help you make your body flexible and elastic.',
+    exercises: ['Tai Chi', 'Meditation', 'Stretching'],
+    duration: 10,
+    postRestTime: 4,
+  },
   status: 'idle',
   fetchStatus: 'idle',
 };

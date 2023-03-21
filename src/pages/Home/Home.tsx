@@ -3,51 +3,57 @@ import React, { useState } from 'react';
 import { Text, ScrollView, View, Pressable } from 'react-native';
 import { Colors } from '../../Styles';
 import { homeStyles } from './HomeStyles';
-import { useAppSelector } from '../../store/hooks/index';
-import { useEffect } from 'react';
+import { useAppSelector, useAppDispatch } from '../../store/hooks/index';
+import {
+  setCurrentState,
+  setCurrentWorkout,
+} from '../../store/slices/workoutSlice';
 
 const Home = () => {
+  const dispatch = useAppDispatch();
+  dispatch(setCurrentWorkout(0));
   const currentWorkout = useAppSelector(state => state.workout.currentWorkout);
-  const [timer, setTimer] = useState<number>(currentWorkout?.duration || 0);
-  const handleStart = () => {};
+  const workoutState = useAppSelector(state => state.workout.status);
+  const workouts = useAppSelector(state => state.workout.workouts);
+  const [timer, setTimer] = useState<number>(
+    currentWorkout ? currentWorkout.duration : 0,
+  );
+  const handleStart = () => {
+    workoutDurationCountdown();
+  };
+  const workoutDurationCountdown = () => {
+    dispatch(setCurrentState('inProgress'));
+    const intervalId = setInterval(() => {
+      setTimer(state => {
+        if (state === 0) {
+          clearInterval(intervalId);
+          setNextWorkout(currentWorkout ? workouts.indexOf(currentWorkout) : 0);
+          return 0;
+        }
+        if (state <= 10) {
+          RNSystemSounds.beep();
+        }
+        return state - 1;
+      });
+    }, 1000);
+  };
 
-  useEffect(() => {
-    if (!currentWorkout?.duration || !currentWorkout.postRestTime) {
-      return;
+  const setNextWorkout = (prevIndex: number) => {
+    const numOfWorkouts = workouts.length;
+    if (prevIndex < 0 || prevIndex > numOfWorkouts - 1) {
+      console.log('Before', currentWorkout);
+      dispatch(setCurrentWorkout(-1));
     } else {
-      const intervalId = setInterval(() => {
-        setTimer(state => {
-          if (state === 0) {
-            clearInterval(intervalId);
-            return 0;
-          }
-          if (state <= 10) {
-            RNSystemSounds.beep();
-          }
-          return state - 1;
-        });
-      }, 1000);
-
-      // Exercute Rest Time
-
-      const restCounterId = setTimeout(() => {
-        setTimer(state => {
-          if (state === 0) {
-            clearInterval(restCounterId);
-            return 0;
-          }
-          if (state <= 10) {
-            RNSystemSounds.beep();
-          }
-          return state - 1;
-        });
-      }, currentWorkout.postRestTime * 60);
+      console.log(currentWorkout);
+      dispatch(setCurrentWorkout(prevIndex + 1));
     }
-  }, [currentWorkout]);
+  };
 
   return (
     <ScrollView style={[homeStyles.container, Colors.primary]}>
-      <Text style={[homeStyles.workoutTitle, Colors.onPrimary]}>Yoga</Text>
+      <Text style={[homeStyles.workoutTitle, Colors.onPrimary]}>
+        {currentWorkout?.title}
+      </Text>
       <View style={homeStyles.mainView}>
         <Text style={[homeStyles.countDown, Colors.onPrimary]}>{timer}</Text>
         <View style={[homeStyles.divider]} />
@@ -62,15 +68,20 @@ const Home = () => {
           </View>
           <View style={[homeStyles.cardView]}>
             <Text style={[homeStyles.cardTitleText]}>Duration</Text>
-            <Text style={homeStyles.cardText}>30 mins</Text>
+            <Text style={homeStyles.cardText}>
+              {currentWorkout?.duration} mins
+            </Text>
           </View>
           <View style={[homeStyles.cardView]}>
             <Text style={[homeStyles.cardTitleText]}>Rest</Text>
-            <Text style={homeStyles.cardText}>4 mins</Text>
+            <Text style={homeStyles.cardText}>
+              {currentWorkout?.postRestTime} mins
+            </Text>
           </View>
         </View>
         <View style={homeStyles.startBtnContainer}>
           <Pressable
+            disabled={workoutState === 'inProgress'}
             onPress={handleStart}
             android_ripple={{ color: '#b91c1c' }}
             style={[homeStyles.startBtn]}>

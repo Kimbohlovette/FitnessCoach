@@ -9,6 +9,6 @@ export interface Workout {
 export interface InitialState {
   workouts: Workout[];
   currentWorkout: Workout | null;
-  status: 'idle' | 'progress' | 'paused' | 'ready';
+  status: 'idle' | 'inProgress' | 'paused' | 'ready';
   fetchStatus: 'idle' | 'loading' | 'failed';
 }
