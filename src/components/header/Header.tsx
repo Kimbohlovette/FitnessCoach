@@ -1,6 +1,6 @@
 import React from 'react';
 import { DrawerLayoutAndroid, Pressable, Text, View } from 'react-native';
-import HeaderStyles from '../Header/HeaderStyle';
+import HeaderStyles from './HeaderStyle';
 import Icon from 'react-native-vector-icons/AntDesign';
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -14,7 +14,7 @@ const Header = (props: { drawer: React.RefObject<DrawerLayoutAndroid> }) => {
           color={HeaderStyles.headerText.color}
         />
       </Pressable>
-      <Text style={HeaderStyles.headerText}>Header</Text>
+      <Text style={HeaderStyles.headerText}>Fitness Coach</Text>
       <Pressable>
         <Icon style={HeaderStyles.headerIcon} name={'user'} size={30} />
       </Pressable>

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { DrawerLayoutAndroid, StatusBar, View } from 'react-native';
-import Header from './components/Header/Header';
+import Header from './components/header/Header';
 import Home from './pages/Home/Home';
 import { Colors } from './Styles';
 import { Pressable } from 'react-native';
@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Overview from './components/overview/Overview';
 import { useAppDispatch, useAppSelector } from './store/hooks/index';
 import { fetchWorkoutsAsync } from './store/slices/workoutSlice';
-import Loading from './components/Loading';
+import Loading from './components/loading/Loading';
 
 const App = () => {
   const dispatch = useAppDispatch();
