@@ -1,5 +1,5 @@
 import RNSystemSounds from '@dashdoc/react-native-system-sounds';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, ScrollView, View, Pressable } from 'react-native';
 import { Colors } from '../../Styles';
 import { homeStyles } from './HomeStyles';
@@ -9,31 +9,35 @@ import { Workout } from '../../types';
 const Home = () => {
   const workouts = useAppSelector(state => state.workout.workouts);
   const [workout, setWorkout] = useState<Workout>(workouts[0]);
-  const [timer, setTimer] = useState<number>(workout ? workout.duration : 20);
+  const [timer, setTimer] = useState<number>(workout.duration);
   const [index, setIndex] = useState<number>(0);
-  const [countState, setCountdown] = useState<'idle' | 'inProgress'>('idle');
+  const [countState, setCountdownState] = useState<'idle' | 'inProgress'>(
+    'idle',
+  );
 
   const setNextWorkout = (prevIndex: number) => {
     if (prevIndex >= workouts.length - 1) {
       setWorkout(workouts[0]);
       return 0;
+    } else {
+      setWorkout(workouts[prevIndex + 1]);
+      return prevIndex + 1;
     }
-    setWorkout(workouts[prevIndex + 1]);
-    return prevIndex + 1;
   };
 
   const startTimerCountdown = () => {
     setTimer(workout.duration);
-    setCountdown('inProgress');
+    console.log(timer);
+    setCountdownState('inProgress');
     const countId = setInterval(() => {
       setTimer(state => {
         if (state === 0) {
           setIndex(setNextWorkout(index));
           clearInterval(countId);
-          setCountdown('idle');
+          setCountdownState('idle');
           return 0;
         }
-        if (timer <= 10) {
+        if (state <= 5) {
           RNSystemSounds.beep();
         }
         return state - 1;
@@ -42,9 +46,17 @@ const Home = () => {
   };
 
   const handleStart = () => {
-    setNextWorkout(index);
+    console.log('handleStartINdex: ', index);
+    console.log('handlestart timer: ', timer);
     startTimerCountdown();
   };
+
+  useEffect(() => {
+    if (index) {
+      startTimerCountdown();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index]);
 
   return (
     <ScrollView style={[homeStyles.container, Colors.primary]}>
