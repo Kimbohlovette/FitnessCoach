@@ -6,6 +6,7 @@ import { homeStyles } from './HomeStyles';
 import { useAppSelector } from '../../store/hooks/index';
 import { Workout } from '../../types';
 import Icon from 'react-native-vector-icons/Entypo';
+import Tts from 'react-native-tts';
 
 const Home = () => {
   const workouts = useAppSelector(state => state.workout.workouts);
@@ -45,7 +46,7 @@ const Home = () => {
   };
 
   const startRestTimerCountdown = () => {
-    setTimer(workout.postRestTime);
+    setTimer(workout.postRestTime + 5);
     const restCountId = setInterval(() => {
       RNSystemSounds.beep();
       setTimer(state => {
@@ -65,14 +66,15 @@ const Home = () => {
   };
 
   useEffect(() => {
+    Tts.speak(workout.title);
     if (index) {
       startTimerCountdown();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index]);
-
   useEffect(() => {
     if (countState === 'resting') {
+      Tts.speak('Break Time');
       startRestTimerCountdown();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
