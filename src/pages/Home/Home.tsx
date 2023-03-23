@@ -5,15 +5,16 @@ import { Colors } from '../../Styles';
 import { homeStyles } from './HomeStyles';
 import { useAppSelector } from '../../store/hooks/index';
 import { Workout } from '../../types';
+import Icon from 'react-native-vector-icons/Entypo';
 
 const Home = () => {
   const workouts = useAppSelector(state => state.workout.workouts);
   const [workout, setWorkout] = useState<Workout>(workouts[0]);
   const [timer, setTimer] = useState<number>(workout.duration);
   const [index, setIndex] = useState<number>(0);
-  const [countState, setCountdownState] = useState<'idle' | 'inProgress'>(
-    'idle',
-  );
+  const [countState, setCountdownState] = useState<
+    'idle' | 'inProgress' | 'resting'
+  >('idle');
 
   const setNextWorkout = (prevIndex: number) => {
     if (prevIndex >= workouts.length - 1) {
@@ -27,17 +28,15 @@ const Home = () => {
 
   const startTimerCountdown = () => {
     setTimer(workout.duration);
-    console.log(timer);
     setCountdownState('inProgress');
     const countId = setInterval(() => {
       setTimer(state => {
         if (state === 0) {
-          setIndex(setNextWorkout(index));
           clearInterval(countId);
-          setCountdownState('idle');
+          setCountdownState('resting');
           return 0;
         }
-        if (state <= 5) {
+        if (state <= 10) {
           RNSystemSounds.beep();
         }
         return state - 1;
@@ -45,9 +44,23 @@ const Home = () => {
     }, 1000);
   };
 
+  const startRestTimerCountdown = () => {
+    setTimer(workout.postRestTime);
+    const restCountId = setInterval(() => {
+      RNSystemSounds.beep();
+      setTimer(state => {
+        if (state === 0) {
+          setCountdownState('idle');
+          clearInterval(restCountId);
+          setIndex(setNextWorkout(index));
+          return 0;
+        }
+        return state - 1;
+      });
+    }, 1000);
+  };
+
   const handleStart = () => {
-    console.log('handleStartINdex: ', index);
-    console.log('handlestart timer: ', timer);
     startTimerCountdown();
   };
 
@@ -58,17 +71,31 @@ const Home = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index]);
 
+  useEffect(() => {
+    if (countState === 'resting') {
+      startRestTimerCountdown();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countState]);
+
   return (
     <ScrollView style={[homeStyles.container, Colors.primary]}>
-      <Text style={[homeStyles.workoutTitle, Colors.onPrimary]}>
-        {workout ? workout.title : 'Cardio'}
-      </Text>
+      {countState !== 'resting' ? (
+        <Text style={[homeStyles.workoutTitle, Colors.onPrimary]}>
+          {index + 1}. {workout.title}
+        </Text>
+      ) : (
+        <Text style={[homeStyles.workoutTitle, Colors.onPrimary]}>
+          Take a Breath.
+        </Text>
+      )}
       <View style={homeStyles.mainView}>
         <Text style={[homeStyles.countDown, Colors.onPrimary]}>{timer}</Text>
         <View style={[homeStyles.divider]} />
         <View style={homeStyles.workoutDesc}>
           {workout.exercises.map((wrkout, key) => (
             <Text style={homeStyles.workoutDescText} key={key}>
+              <Icon name="dot-single" size={15} color="lightgray" />
               {wrkout}
             </Text>
           ))}

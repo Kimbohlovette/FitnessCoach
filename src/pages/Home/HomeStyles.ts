@@ -53,25 +53,24 @@ export const homeStyles = StyleSheet.create({
   },
   cardView: {
     alignItems: 'center',
-    padding: 16,
+    padding: 10,
     marginHorizontal: 2,
     flex: 1,
     borderRadius: 2,
     elevation: 1,
     shadowColor: 'red',
-    backgroundColor: 'white',
   },
   cardTitleText: {
     textAlign: 'left',
     textTransform: 'uppercase',
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: 'white',
   },
   cardText: {
     textAlign: 'left',
     textTransform: 'capitalize',
     paddingVertical: 2,
-    color: 'gray',
+    color: 'lightgray',
   },
   startBtnContainer: {
     overflow: 'hidden',
@@ -80,6 +79,7 @@ export const homeStyles = StyleSheet.create({
     elevation: 2,
     width: '80%',
     shadowColor: 'red',
+    marginTop: 24,
   },
   startBtn: {
     paddingVertical: 16,
