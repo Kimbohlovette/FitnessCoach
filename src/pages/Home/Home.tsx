@@ -1,36 +1,43 @@
 import RNSystemSounds from '@dashdoc/react-native-system-sounds';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, ScrollView, View, Pressable } from 'react-native';
 import { Colors } from '../../Styles';
 import { homeStyles } from './HomeStyles';
-import { useAppSelector, useAppDispatch } from '../../store/hooks/index';
-import {
-  setCurrentState,
-  setCurrentWorkout,
-} from '../../store/slices/workoutSlice';
+import { useAppSelector } from '../../store/hooks/index';
+import { Workout } from '../../types';
 
 const Home = () => {
-  const dispatch = useAppDispatch();
-  dispatch(setCurrentWorkout(0));
-  const currentWorkout = useAppSelector(state => state.workout.currentWorkout);
-  const workoutState = useAppSelector(state => state.workout.status);
   const workouts = useAppSelector(state => state.workout.workouts);
-  const [timer, setTimer] = useState<number>(
-    currentWorkout ? currentWorkout.duration : 0,
+  const [workout, setWorkout] = useState<Workout>(workouts[0]);
+  const [timer, setTimer] = useState<number>(workout.duration);
+  const [index, setIndex] = useState<number>(0);
+  const [countState, setCountdownState] = useState<'idle' | 'inProgress'>(
+    'idle',
   );
-  const handleStart = () => {
-    workoutDurationCountdown();
+
+  const setNextWorkout = (prevIndex: number) => {
+    if (prevIndex >= workouts.length - 1) {
+      setWorkout(workouts[0]);
+      return 0;
+    } else {
+      setWorkout(workouts[prevIndex + 1]);
+      return prevIndex + 1;
+    }
   };
-  const workoutDurationCountdown = () => {
-    dispatch(setCurrentState('inProgress'));
-    const intervalId = setInterval(() => {
+
+  const startTimerCountdown = () => {
+    setTimer(workout.duration);
+    console.log(timer);
+    setCountdownState('inProgress');
+    const countId = setInterval(() => {
       setTimer(state => {
         if (state === 0) {
-          clearInterval(intervalId);
-          setNextWorkout(currentWorkout ? workouts.indexOf(currentWorkout) : 0);
+          setIndex(setNextWorkout(index));
+          clearInterval(countId);
+          setCountdownState('idle');
           return 0;
         }
-        if (state <= 10) {
+        if (state <= 5) {
           RNSystemSounds.beep();
         }
         return state - 1;
@@ -38,29 +45,34 @@ const Home = () => {
     }, 1000);
   };
 
-  const setNextWorkout = (prevIndex: number) => {
-    const numOfWorkouts = workouts.length;
-    if (prevIndex < 0 || prevIndex > numOfWorkouts - 1) {
-      console.log('Before', currentWorkout);
-      dispatch(setCurrentWorkout(-1));
-    } else {
-      console.log(currentWorkout);
-      dispatch(setCurrentWorkout(prevIndex + 1));
-    }
+  const handleStart = () => {
+    console.log('handleStartINdex: ', index);
+    console.log('handlestart timer: ', timer);
+    startTimerCountdown();
   };
+
+  useEffect(() => {
+    if (index) {
+      startTimerCountdown();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [index]);
 
   return (
     <ScrollView style={[homeStyles.container, Colors.primary]}>
       <Text style={[homeStyles.workoutTitle, Colors.onPrimary]}>
-        {currentWorkout?.title}
+        {workout ? workout.title : 'Cardio'}
       </Text>
       <View style={homeStyles.mainView}>
         <Text style={[homeStyles.countDown, Colors.onPrimary]}>{timer}</Text>
         <View style={[homeStyles.divider]} />
-        <Text style={homeStyles.workoutDesc}>
-          Some feeding description about the yoga sport and benefits to the
-          body.
-        </Text>
+        <View style={homeStyles.workoutDesc}>
+          {workout.exercises.map((wrkout, key) => (
+            <Text style={homeStyles.workoutDescText} key={key}>
+              {wrkout}
+            </Text>
+          ))}
+        </View>
         <View style={[homeStyles.cardsContainerView]}>
           <View style={[homeStyles.cardView]}>
             <Text style={[homeStyles.cardTitleText]}>Difficulty</Text>
@@ -68,20 +80,18 @@ const Home = () => {
           </View>
           <View style={[homeStyles.cardView]}>
             <Text style={[homeStyles.cardTitleText]}>Duration</Text>
-            <Text style={homeStyles.cardText}>
-              {currentWorkout?.duration} mins
-            </Text>
+            <Text style={homeStyles.cardText}>{workout?.duration} mins</Text>
           </View>
           <View style={[homeStyles.cardView]}>
             <Text style={[homeStyles.cardTitleText]}>Rest</Text>
             <Text style={homeStyles.cardText}>
-              {currentWorkout?.postRestTime} mins
+              {workout?.postRestTime} mins
             </Text>
           </View>
         </View>
         <View style={homeStyles.startBtnContainer}>
           <Pressable
-            disabled={workoutState === 'inProgress'}
+            disabled={countState === 'inProgress'}
             onPress={handleStart}
             android_ripple={{ color: '#b91c1c' }}
             style={[homeStyles.startBtn]}>

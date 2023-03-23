@@ -24,6 +24,15 @@ export const homeStyles = StyleSheet.create({
     color: Colors.onPrimary.color,
     paddingHorizontal: 24,
     textAlign: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  workoutDescText: {
+    color: 'lightgray',
+    borderRadius: 2,
+    marginHorizontal: 2,
+    textTransform: 'capitalize',
   },
   countDown: {
     fontSize: 92,
@@ -43,6 +52,7 @@ export const homeStyles = StyleSheet.create({
     marginVertical: 36,
   },
   cardView: {
+    alignItems: 'center',
     padding: 16,
     marginHorizontal: 2,
     flex: 1,
