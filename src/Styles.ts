@@ -20,3 +20,15 @@ export const Colors = StyleSheet.create({
     color: 'gray',
   },
 });
+
+export const appStyles = StyleSheet.create({
+  closeDrawerBtn: {
+    width: '15%',
+    marginTop: 16,
+    marginRight: 8,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'flex-end',
+  },
+});

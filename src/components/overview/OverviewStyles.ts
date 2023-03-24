@@ -10,7 +10,7 @@ export const overviewStyles = StyleSheet.create({
     borderRadius: 6,
   },
   workTitleStyle: {
-    fontSize: 20,
+    fontSize: 16,
     color: 'white',
   },
   workDescStyle: {
