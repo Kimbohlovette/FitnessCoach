@@ -120,7 +120,7 @@ const Home = () => {
         </View>
         <View style={homeStyles.startBtnContainer}>
           <Pressable
-            disabled={countState === 'inProgress'}
+            disabled={countState !== 'idle'}
             onPress={handleStart}
             android_ripple={{ color: '#b91c1c' }}
             style={[homeStyles.startBtn]}>
