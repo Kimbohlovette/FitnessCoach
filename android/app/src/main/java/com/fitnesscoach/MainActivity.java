@@ -3,6 +3,7 @@ package com.fitnesscoach;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
+import com.marcshilling.idletimer.IdleTimerPackage;
 
 public class MainActivity extends ReactActivity {
 
@@ -14,6 +15,14 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "FitnessCoach";
   }
+
+  @Override
+protected List<ReactPackage> getPackages() {
+  return Arrays.<ReactPackage>asList(
+    new MainReactPackage(),
+    new IdleTimerPackage() // <---- and This!
+  );
+}
 
   /**
    * Returns the instance of the {@link ReactActivityDelegate}. There the RootView is created and

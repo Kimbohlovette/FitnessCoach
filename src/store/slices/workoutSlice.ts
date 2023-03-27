@@ -7,12 +7,11 @@ import { AppDispatch } from '../store';
 const initialState: InitialState = {
   workouts: [
     {
-      title: 'Yoga',
-      description:
-        'Slow motion exercise that help you make your body flexible and elastic.',
-      exercises: ['Tai Chi', 'Meditation', 'Stretching'],
-      duration: 10,
-      postRestTime: 4,
+      title: '',
+      description: '',
+      exercises: [],
+      duration: 0,
+      postRestTime: 0,
     },
   ],
   currentWorkout: {

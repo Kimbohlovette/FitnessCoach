@@ -7,6 +7,7 @@ import { useAppSelector } from '../../store/hooks/index';
 import { Workout } from '../../types';
 import Icon from 'react-native-vector-icons/Entypo';
 import Tts from 'react-native-tts';
+import IdleTimerManager from 'react-native-idle-timer';
 
 const Home = () => {
   const workouts = useAppSelector(state => state.workout.workouts);
@@ -66,17 +67,22 @@ const Home = () => {
   };
 
   useEffect(() => {
+    IdleTimerManager.setIdleTimerDisabled(true, 'yeah');
     Tts.speak(workout.title);
     if (index) {
       startTimerCountdown();
     }
+    return () => IdleTimerManager.setIdleTimerDisabled(false, '');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index]);
   useEffect(() => {
+    IdleTimerManager.setIdleTimerDisabled(true, '');
     if (countState === 'resting') {
       Tts.speak('Break Time');
       startRestTimerCountdown();
     }
+    return () => IdleTimerManager.setIdleTimerDisabled(false, '');
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countState]);
 
